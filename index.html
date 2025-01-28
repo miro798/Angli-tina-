@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Quiz</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 20px; }
+        .question { margin-bottom: 20px; }
+        .result { font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>English Quiz</h1>
+    <div id="quiz-container">
+        <div id="question-container" class="question"></div>
+        <input type="text" id="answer-input" placeholder="Your answer">
+        <button id="submit-btn">Submit</button>
+        <p id="feedback" class="result"></p>
+    </div>
+
+    <script>
+    const questions = [
+  { "question": "Base form of 'went'?", "answer": "go", "translation": "Základní tvar od 'šel'?" },
+  { "question": "Past participle of 'do'?", "answer": "done", "translation": "Třetí tvar slovesa 'dělat'?" },
+  { "question": "He ____ (to read) a book yesterday.", "answer": "read", "translation": "On ____ (číst) knihu včera." },
+  { "question": "They ____ (to write) a letter last week.", "answer": "wrote", "translation": "Oni ____ (psát) dopis minulý týden." },
+  { "question": "What tense is this? 'She is eating lunch.'", "answer": "present continuous", "translation": "Jaký je to čas? 'Ona právě jí oběd.'" },
+  { "question": "Base form of 'saw'?", "answer": "see", "translation": "Základní tvar od 'viděl'?" },
+  { "question": "Past participle of 'break'?", "answer": "broken", "translation": "Třetí tvar slovesa 'zlomit'?" },
+  { "question": "She ____ (to eat) an apple yesterday.", "answer": "ate", "translation": "Ona ____ (jíst) jablko včera." },
+  { "question": "He ____ (to go) to school every day.", "answer": "goes", "translation": "On ____ (chodit) do školy každý den." },
+  { "question": "They ____ (to buy) a new car last month.", "answer": "bought", "translation": "Oni ____ (koupit) nové auto minulý měsíc." },
+  { "question": "What tense is this? 'She has already finished her homework.'", "answer": "present perfect", "translation": "Jaký je to čas? 'Ona už dokončila svůj domácí úkol.'" },
+  { "question": "What tense is this? 'They were sleeping when the phone rang.'", "answer": "past continuous", "translation": "Jaký je to čas? 'Spali, když zazvonil telefon.'" },
+  { "question": "Base form of 'began'?", "answer": "begin", "translation": "Základní tvar od 'začal'?" },
+  { "question": "Past participle of 'speak'?", "answer": "spoken", "translation": "Třetí tvar slovesa 'mluvit'?" },
+  { "question": "He ____ (to play) football every weekend.", "answer": "plays", "translation": "On ____ (hrát) fotbal každý víkend." },
+  { "question": "We ____ (to visit) them last week.", "answer": "visited", "translation": "My jsme je ____ (navštívit) minulý týden." },
+  { "question": "What tense is this? 'They will have arrived by 8 PM.'", "answer": "future perfect", "translation": "Jaký je to čas? 'Dorazí do osmé večer.'" },
+  { "question": "She ____ (to drink) tea every morning.", "answer": "drinks", "translation": "Ona ____ (pít) čaj každé ráno." },
+  { "question": "They ____ (to go) to the park yesterday.", "answer": "went", "translation": "Oni ____ (jít) do parku včera." },
+  { "question": "Base form of 'thought'?", "answer": "think", "translation": "Základní tvar od 'myslel'?" },
+  { "question": "Past participle of 'drive'?", "answer": "driven", "translation": "Třetí tvar slovesa 'řídit'?" },
+  { "question": "What tense is this? 'I will be traveling tomorrow at this time.'", "answer": "future continuous", "translation": "Jaký je to čas? 'Zítra v tuto dobu budu cestovat.'" },
+  { "question": "They ____ (to eat) pizza last night.", "answer": "ate", "translation": "Oni ____ (jíst) pizzu včera večer." },
+  { "question": "He ____ (to swim) every summer.", "answer": "swims", "translation": "On ____ (plavat) každé léto." },
+  { "question": "What tense is this? 'She had left before I arrived.'", "answer": "past perfect", "translation": "Jaký je to čas? 'Ona odešla předtím, než jsem dorazil.'" },
+  { "question": "Base form of 'gave'?", "answer": "give", "translation": "Základní tvar od 'dal'?" },
+  { "question": "Past participle of 'see'?", "answer": "seen", "translation": "Třetí tvar slovesa 'vidět'?" },
+  { "question": "He ____ (to run) every morning.", "answer": "runs", "translation": "On ____ (běhat) každé ráno." },
+  { "question": "What tense is this? 'I have been reading for two hours.'", "answer": "present perfect continuous", "translation": "Jaký je to čas? 'Čtu už dvě hodiny.'" },
+  { "question": "She ____ (to cook) dinner yesterday evening.", "answer": "cooked", "translation": "Ona ____ (vařit) večeři včera večer." },
+  { "question": "Base form of 'took'?", "answer": "take", "translation": "Základní tvar od 'vzal'?" },
+  { "question": "Past participle of 'know'?", "answer": "known", "translation": "Třetí tvar slovesa 'vědět'?" },
+  { "question": "They ____ (to watch) TV every evening.", "answer": "watch", "translation": "Oni ____ (sledovat) televizi každý večer." },
+  { "question": "What tense is this? 'I will have been working here for ten years next month.'", "answer": "future perfect continuous", "translation": "Jaký je to čas? 'Příští měsíc budu pracovat tady už deset let.'" }
+];
+
+        // Funkce pro náhodné zamíchání pole
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // Zamíchání otázek
+        const shuffledQuestions = shuffle([...questions]);
+
+        let currentQuestionIndex = 0;
+        const questionContainer = document.getElementById('question-container');
+        const answerInput = document.getElementById('answer-input');
+        const feedback = document.getElementById('feedback');
+        const submitBtn = document.getElementById('submit-btn');
+
+        function loadQuestion() {
+            const question = shuffledQuestions[currentQuestionIndex];
+            questionContainer.textContent = `${question.question} (${question.translation})`;
+            answerInput.value = '';
+            feedback.textContent = '';
+        }
+
+        function checkAnswer() {
+            const userAnswer = answerInput.value.trim().toLowerCase();
+            const correctAnswer = shuffledQuestions[currentQuestionIndex].answer.toLowerCase();
+
+            if (userAnswer === correctAnswer) {
+                feedback.textContent = 'Correct!';
+                feedback.style.color = 'green';
+            } else {
+                feedback.textContent = `Wrong! Correct answer: ${shuffledQuestions[currentQuestionIndex].answer}`;
+                feedback.style.color = 'red';
+            }
+
+            currentQuestionIndex++;
+            if (currentQuestionIndex < shuffledQuestions.length) {
+                setTimeout(loadQuestion, 1000); // Načte další otázku po 1 sekundě
+            } else {
+                feedback.textContent += ' Quiz completed!';
+                submitBtn.disabled = true;
+            }
+        }
+
+        submitBtn.addEventListener('click', checkAnswer);
+
+        // Načtení první otázky
+        loadQuestion();
+    </script>
+</body>
+</html>
